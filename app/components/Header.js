@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
@@ -12,16 +12,28 @@ const NAV_LINKS = [
   { id: "formulaire", label: "Contact" },
 ];
 
+const HEADER_HEIGHT = 0;
+
 export default function Header({ isNight, logoSrc, toggleTheme }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const isMenuOpenRef = useRef(false);
+
+  useEffect(() => {
+    isMenuOpenRef.current = isMenuOpen;
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Ferme le menu au scroll
-      if (isMenuOpen) setIsMenuOpen(false);
+      if (isMenuOpenRef.current) {
+        setIsMenuOpen(false);
+        return;
+      }
 
-      // Aucun lien actif en haut de page
       if (window.scrollY < 100) {
         setActiveSection("");
         return;
@@ -40,7 +52,21 @@ export default function Header({ isNight, logoSrc, toggleTheme }) {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isMenuOpen]);
+  }, []);
+
+  const handleNavClick = (e, id) => {
+    e.preventDefault();
+    setIsMenuOpen(false);
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        window.scrollTo({
+          top: el.offsetTop - HEADER_HEIGHT,
+          behavior: "smooth",
+        });
+      }
+    }, 400);
+  };
 
   return (
     <header className="header">
@@ -65,32 +91,13 @@ export default function Header({ isNight, logoSrc, toggleTheme }) {
           </Link>
         </div>
 
-        <button
-          className="hamburger"
-          onClick={() => setIsMenuOpen((prev) => !prev)}
-          aria-label="Ouvrir le menu"
-          aria-expanded={isMenuOpen}
-        >
-          <span className={`line ${isMenuOpen ? "open" : ""}`}></span>
-          <span className={`line ${isMenuOpen ? "open" : ""}`}></span>
-          <span className={`line ${isMenuOpen ? "open" : ""}`}></span>
-        </button>
-
         <ul className={`menu-items ${isMenuOpen ? "active" : ""}`}>
           {NAV_LINKS.map(({ id, label }) => (
             <li key={id}>
               <Link
                 href={`#${id}`}
                 className={activeSection === id ? "active-link" : ""}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsMenuOpen(false);
-                  const el = document.getElementById(id);
-                  if (el) {
-                    const top = el.offsetTop -0;
-                    window.scrollTo({ top, behavior: "smooth" });
-                  }
-                }}
+                onClick={(e) => handleNavClick(e, id)}
               >
                 {label}
               </Link>
@@ -168,6 +175,17 @@ export default function Header({ isNight, logoSrc, toggleTheme }) {
             />
           </button>
         </div>
+
+        <button
+          className="hamburger"
+          onClick={() => setIsMenuOpen((prev) => !prev)}
+          aria-label="Ouvrir le menu"
+          aria-expanded={isMenuOpen}
+        >
+          <span className={`line ${isMenuOpen ? "open" : ""}`}></span>
+          <span className={`line ${isMenuOpen ? "open" : ""}`}></span>
+          <span className={`line ${isMenuOpen ? "open" : ""}`}></span>
+        </button>
       </nav>
     </header>
   );

@@ -119,13 +119,19 @@ export default function Contact() {
     <section id="formulaire" className="contact-section">
       <div className="container">
         <div className="section-header">
-          <span className="subtitle">Contact</span>
+          <span className="subtitle">Contact & RDV</span>
           <h2>
             Me <span className="highlight">Contacter</span>
           </h2>
         </div>
 
         <Calendly />
+
+        <div className="div_titre">
+          <p className="titre_form">
+            Une question ou une proposition ? Utilisez le formulaire ci-dessous.
+          </p>
+        </div>
 
         <div className="contact-grid">
           <div className="contact-info">
