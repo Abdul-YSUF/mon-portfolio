@@ -17,7 +17,7 @@ export async function POST(request) {
     const recaptchaData = await recaptchaRes.json();
     console.log("reCAPTCHA result:", recaptchaData);
 
-    if (!recaptchaData.success || recaptchaData.score < 0.5) {
+    if (!recaptchaData.success) {
       return NextResponse.json(
         { message: "Vérification reCAPTCHA échouée." },
         { status: 400 },
