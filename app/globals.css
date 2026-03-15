@@ -1038,7 +1038,6 @@ html {
 
 .footer-logo p {
   margin-top: 5rem;
-
 }
 
 .footer-socials {
@@ -1064,4 +1063,8 @@ html {
   border-top: 1px solid var(--glass-border);
   font-size: 0.9rem;
   color: var(--text-muted);
+}
+
+.grecaptcha-badge {
+  visibility: hidden !important;
 }

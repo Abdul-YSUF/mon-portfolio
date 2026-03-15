@@ -1,11 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
-import {
-  FaPaperPlane,
-  FaEnvelope,
-  FaCheckCircle,
-  FaPhoneAlt,
-} from "react-icons/fa";
+import { FaPaperPlane, FaEnvelope, FaCheckCircle } from "react-icons/fa";
 import ReCAPTCHA from "./GoogleReCaptchaProvider";
 import Calendly from "./Calendly";
 
@@ -141,15 +136,6 @@ export default function Contact() {
               <div>
                 <h4>Email</h4>
                 <p>abdulledev@gmail.com</p>
-              </div>
-            </div>
-            <div className="info-item">
-              <div className="info-icon">
-                <FaPhoneAlt />
-              </div>
-              <div>
-                <h4>Téléphone</h4>
-                <p>06 43 53 10 32</p>
               </div>
             </div>
           </div>
