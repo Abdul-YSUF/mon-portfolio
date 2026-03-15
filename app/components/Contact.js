@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   FaPaperPlane,
   FaEnvelope,
@@ -8,10 +8,9 @@ import {
 } from "react-icons/fa";
 import ReCAPTCHA from "./GoogleReCaptchaProvider";
 import Calendly from "./Calendly";
-import Script from "next/script";
 
 export default function Contact() {
-  const [isRecaptchaLoaded, setIsRecaptchaLoaded] = useState(false);
+  const recaptchaRef = useRef(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,11 +20,6 @@ export default function Contact() {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState(null);
-
-  const handleRecaptchaVerify = (token) => {
-    setRecaptchaToken(token);
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,20 +89,17 @@ export default function Contact() {
     const isValid = validateForm();
     if (!isValid) return;
 
-    if (!recaptchaToken) {
-      setStatus("recaptcha");
-      setTimeout(() => setStatus(""), 3000);
-      return;
-    }
-
     setIsSubmitting(true);
     setStatus("sending");
 
     try {
+      // ✅ Token généré au moment du submit
+      const token = await recaptchaRef.current.execute();
+
       const response = await fetch("/api/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, recaptchaToken }),
+        body: JSON.stringify({ ...formData, recaptchaToken: token }),
       });
 
       const result = await response.json();
@@ -117,7 +108,6 @@ export default function Contact() {
         setStatus("success");
         setFormData({ name: "", email: "", phone: "", message: "" });
         setErrors({});
-        setRecaptchaToken(null);
       } else {
         setStatus("error");
         console.error("Erreur serveur :", result.message);
@@ -151,6 +141,15 @@ export default function Contact() {
               <div>
                 <h4>Email</h4>
                 <p>abdulledev@gmail.com</p>
+              </div>
+            </div>
+            <div className="info-item">
+              <div className="info-icon">
+                <FaPhoneAlt />
+              </div>
+              <div>
+                <h4>Téléphone</h4>
+                <p>06 43 53 10 32</p>
               </div>
             </div>
           </div>
@@ -250,13 +249,8 @@ export default function Contact() {
                   )}
                 </div>
 
-                <ReCAPTCHA onVerify={handleRecaptchaVerify} />
-
-                {status === "recaptcha" && (
-                  <p className="error-text">
-                    Veuillez valider le reCAPTCHA avant d'envoyer.
-                  </p>
-                )}
+                {/* ✅ ref au lieu de onVerify */}
+                <ReCAPTCHA ref={recaptchaRef} />
 
                 <button
                   type="submit"
@@ -273,14 +267,6 @@ export default function Contact() {
                   </p>
                 )}
               </form>
-            )}
-
-            {!isRecaptchaLoaded && (
-              <Script
-                src="https://www.google.com/recaptcha/api.js"
-                onLoad={() => setIsRecaptchaLoaded(true)}
-                strategy="lazyOnload"
-              />
             )}
           </div>
         </div>

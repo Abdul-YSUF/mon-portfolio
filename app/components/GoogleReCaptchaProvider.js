@@ -1,13 +1,10 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useImperativeHandle, forwardRef } from "react";
 
-const GoogleReCaptchaProvider = ({ onVerify }) => {
-  const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
-
+const GoogleReCaptchaProvider = forwardRef((props, ref) => {
   useEffect(() => {
     const script = document.createElement("script");
     script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`;
-    script.onload = () => setRecaptchaLoaded(true);
     document.body.appendChild(script);
 
     return () => {
@@ -15,29 +12,31 @@ const GoogleReCaptchaProvider = ({ onVerify }) => {
     };
   }, []);
 
-  const handleVerify = useCallback(async () => {
-    if (recaptchaLoaded && window.grecaptcha) {
-      window.grecaptcha.ready(async () => {
-        try {
-          const token = await window.grecaptcha.execute(
-            process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
-            { action: "submit" },
-          );
-          onVerify(token);
-        } catch (error) {
-          console.error("Erreur reCAPTCHA :", error);
+  // ✅ Expose execute() au parent via ref
+  useImperativeHandle(ref, () => ({
+    execute: () => {
+      return new Promise((resolve, reject) => {
+        if (window.grecaptcha) {
+          window.grecaptcha.ready(async () => {
+            try {
+              const token = await window.grecaptcha.execute(
+                process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
+                { action: "submit" },
+              );
+              resolve(token);
+            } catch (err) {
+              reject(err);
+            }
+          });
+        } else {
+          reject(new Error("grecaptcha non chargé"));
         }
       });
-    }
-  }, [recaptchaLoaded, onVerify]);
-
-  useEffect(() => {
-    if (recaptchaLoaded) {
-      handleVerify();
-    }
-  }, [recaptchaLoaded, handleVerify]);
+    },
+  }));
 
   return null;
-};
+});
 
+GoogleReCaptchaProvider.displayName = "GoogleReCaptchaProvider";
 export default GoogleReCaptchaProvider;
