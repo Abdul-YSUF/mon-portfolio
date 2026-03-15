@@ -49,7 +49,7 @@ const Calendly = () => {
             digital
           </p>
         </div>
-        <button className="btn-primary calendly-btn" onClick={handleClick}>
+        <button className="btn-primary" onClick={handleClick}>
           Réserver dès maintenant 📆
         </button>
       </div>
