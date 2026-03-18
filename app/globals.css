@@ -679,6 +679,12 @@ html {
   flex-direction: column;
 }
 
+.project-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
 .project-image {
   position: relative;
   height: 200px;

@@ -23,11 +23,10 @@ import {
   SiExpress,
   SiReactrouter,
   SiPhpmyadmin,
+  SiNormalizedotcss,
 } from "react-icons/si";
 import { TbSeo } from "react-icons/tb";
 import { DiPhotoshop } from "react-icons/di";
-
-const NormalizeIcon = () => <span style={{ fontSize: "1em" }}>📄</span>;
 
 const PROJECTS_DATA = [
   {
@@ -38,7 +37,7 @@ const PROJECTS_DATA = [
       "https://res.cloudinary.com/doqbpkxy7/image/upload/q_auto,f_auto/v1742848370/Capture_d_e%CC%81cran_2024-05-17_a%CC%80_22.22.22_yibgmf.png",
     description:
       "Intégration de la page d'accueil et de l'interface responsive pour une plateforme de réservation.",
-    logos: [FaHtml5, FaCss3Alt, NormalizeIcon],
+    logos: [FaHtml5, FaCss3Alt, SiNormalizedotcss],
     demoLink: "https://abdul-ysuf.github.io/Booki",
     codeLink: "https://github.com/Abdul-YSUF/Booki",
     category: "Frontend",
@@ -243,7 +242,7 @@ export default function Projects() {
                   const section = document.getElementById("projets");
                   if (section) {
                     window.scrollTo({
-                      top: section.offsetTop -0,
+                      top: section.offsetTop - 0,
                       behavior: "smooth",
                     });
                   }
@@ -259,12 +258,25 @@ export default function Projects() {
           >
             {showAll ? (
               <>
-                Voir moins <FaArrowUp style={{ marginLeft: "8px", position: "relative", top: "2px" }} />
+                Voir moins{" "}
+                <FaArrowUp
+                  style={{
+                    marginLeft: "8px",
+                    position: "relative",
+                    top: "2px",
+                  }}
+                />
               </>
             ) : (
               <>
                 Voir plus ({PROJECTS_DATA.length - INITIAL_COUNT} projets){" "}
-                <FaArrowDown style={{ marginLeft: "8px", position: "relative", top: "2px" }} />
+                <FaArrowDown
+                  style={{
+                    marginLeft: "8px",
+                    position: "relative",
+                    top: "2px",
+                  }}
+                />
               </>
             )}
           </button>
