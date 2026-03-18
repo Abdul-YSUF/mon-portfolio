@@ -88,7 +88,6 @@ export default function Contact() {
     setStatus("sending");
 
     try {
-      // ✅ Token généré au moment du submit
       const token = await recaptchaRef.current.execute();
 
       const response = await fetch("/api/submit", {
@@ -127,12 +126,6 @@ export default function Contact() {
 
         <Calendly />
 
-        <div className="div_titre">
-          <p className="titre_form">
-            Une question ou une proposition ? Utilisez le formulaire ci-dessous.
-          </p>
-        </div>
-
         <div className="contact-grid">
           <div className="contact-info">
             <div className="info-item">
@@ -147,6 +140,12 @@ export default function Contact() {
           </div>
 
           <div className="contact-wrapper">
+            <div className="div_titre">
+              <p className="titre_form">
+                Une question ou une proposition ? Utilisez le formulaire
+                ci-dessous.
+              </p>
+            </div>
             {status === "success" ? (
               <div className="success-message">
                 <FaCheckCircle />

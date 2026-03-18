@@ -172,6 +172,7 @@ export default function Header({ isNight, logoSrc, toggleTheme }) {
               alt={isNight ? "Mode clair" : "Mode sombre"}
               width={30}
               height={30}
+              className="mode-image"
             />
           </button>
         </div>

@@ -210,6 +210,11 @@ html {
   align-items: center;
 }
 
+.mode-image:hover {
+  transform: rotate(36deg);
+  transition: transform 0.60s ease-in-out;
+}
+
 .hamburger {
   display: none;
   background: none;
@@ -802,7 +807,7 @@ html {
 
 .div_titre {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
   color: var(--text-muted);
 }
 

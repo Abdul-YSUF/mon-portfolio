@@ -1,6 +1,7 @@
 "use client";
+import { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FaGithub,
   FaExternalLinkAlt,
@@ -13,6 +14,8 @@ import {
   FaPhp,
   FaWordpress,
   FaNodeJs,
+  FaArrowUp,
+  FaArrowDown,
 } from "react-icons/fa";
 import {
   SiMongodb,
@@ -144,7 +147,15 @@ const PROJECTS_DATA = [
   },
 ];
 
+const INITIAL_COUNT = 3;
+
 export default function Projects() {
+  const [showAll, setShowAll] = useState(false);
+
+  const visibleProjects = showAll
+    ? PROJECTS_DATA
+    : PROJECTS_DATA.slice(0, INITIAL_COUNT);
+
   return (
     <section id="projets" className="projects-section">
       <div className="container">
@@ -160,63 +171,103 @@ export default function Projects() {
         </div>
 
         <div className="projects-grid">
-          {PROJECTS_DATA.map((project) => (
-            <motion.div
-              key={project.id}
-              className="project-card"
-              whileHover={{ y: -10 }}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <div className="project-image">
-                <Image
-                  src={project.image}
-                  alt={project.altMsg || project.title}
-                  fill
-                  className="img-cover"
-                  unoptimized
-                />
-                <div className="project-overlay">
-                  <div className="project-links">
-                    {project.codeLink && (
-                      <a
-                        href={project.codeLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Github"
-                      >
-                        <FaGithub />
-                      </a>
-                    )}
-                    {project.demoLink && (
-                      <a
-                        href={project.demoLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Demo"
-                      >
-                        <FaExternalLinkAlt />
-                      </a>
-                    )}
+          <AnimatePresence>
+            {visibleProjects.map((project) => (
+              <motion.div
+                key={project.id}
+                className="project-card"
+                whileHover={{ y: -10 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                viewport={{ once: true }}
+              >
+                <div className="project-image">
+                  <Image
+                    src={project.image}
+                    alt={project.altMsg || project.title}
+                    fill
+                    className="img-cover"
+                    unoptimized
+                  />
+                  <div className="project-overlay">
+                    <div className="project-links">
+                      {project.codeLink && (
+                        <a
+                          href={project.codeLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label="Github"
+                        >
+                          <FaGithub />
+                        </a>
+                      )}
+                      {project.demoLink && (
+                        <a
+                          href={project.demoLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label="Demo"
+                        >
+                          <FaExternalLinkAlt />
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="project-info">
-                <span className="project-category">{project.category}</span>
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-                <div className="project-tech-icons">
-                  {project.logos.map((Icon, idx) => (
-                    <span key={idx} className="tech-icon">
-                      <Icon />
-                    </span>
-                  ))}
+                <div className="project-info">
+                  <span className="project-category">{project.category}</span>
+                  <h3>{project.title}</h3>
+                  <p>{project.description}</p>
+                  <div className="project-tech-icons">
+                    {project.logos.map((Icon, idx) => (
+                      <span key={idx} className="tech-icon">
+                        <Icon />
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        <div style={{ textAlign: "center", marginTop: "3rem" }}>
+          <button
+            className="btn-secondary"
+            onClick={() => {
+              if (showAll) {
+                setShowAll(false);
+                requestAnimationFrame(() => {
+                  const section = document.getElementById("projets");
+                  if (section) {
+                    window.scrollTo({
+                      top: section.offsetTop -0,
+                      behavior: "smooth",
+                    });
+                  }
+                });
+              } else {
+                const scrollY = window.scrollY;
+                setShowAll(true);
+                requestAnimationFrame(() => {
+                  window.scrollTo({ top: scrollY, behavior: "instant" });
+                });
+              }
+            }}
+          >
+            {showAll ? (
+              <>
+                Voir moins <FaArrowUp style={{ marginLeft: "8px", position: "relative", top: "2px" }} />
+              </>
+            ) : (
+              <>
+                Voir plus ({PROJECTS_DATA.length - INITIAL_COUNT} projets){" "}
+                <FaArrowDown style={{ marginLeft: "8px", position: "relative", top: "2px" }} />
+              </>
+            )}
+          </button>
         </div>
       </div>
     </section>
