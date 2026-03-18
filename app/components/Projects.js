@@ -14,8 +14,6 @@ import {
   FaPhp,
   FaWordpress,
   FaNodeJs,
-  FaArrowUp,
-  FaArrowDown,
 } from "react-icons/fa";
 import {
   SiMongodb,
@@ -27,6 +25,8 @@ import {
 } from "react-icons/si";
 import { TbSeo } from "react-icons/tb";
 import { DiPhotoshop } from "react-icons/di";
+
+const NormalizeIcon = () => <span style={{ fontSize: "1em" }}>📄</span>;
 
 const PROJECTS_DATA = [
   {
@@ -53,7 +53,7 @@ const PROJECTS_DATA = [
     logos: [FaHtml5, FaSass, FaGithub],
     demoLink: "https://abdul-ysuf.github.io/ohmyfood",
     codeLink: "https://github.com/Abdul-YSUF/ohmyfood",
-    category: "UI/UX",
+    category: "Frontend",
   },
   {
     id: 3,
@@ -146,14 +146,16 @@ const PROJECTS_DATA = [
   },
 ];
 
-const INITIAL_COUNT = 3;
+// ✅ Catégories générées automatiquement depuis les données
+const CATEGORIES = ["Tous", ...new Set(PROJECTS_DATA.map((p) => p.category))];
 
 export default function Projects() {
-  const [showAll, setShowAll] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("Tous");
 
-  const visibleProjects = showAll
-    ? PROJECTS_DATA
-    : PROJECTS_DATA.slice(0, INITIAL_COUNT);
+  const filteredProjects =
+    activeFilter === "Tous"
+      ? PROJECTS_DATA
+      : PROJECTS_DATA.filter((p) => p.category === activeFilter);
 
   return (
     <section id="projets" className="projects-section">
@@ -169,17 +171,31 @@ export default function Projects() {
           </p>
         </div>
 
+        {/* ✅ Filtres */}
+        <div className="projects-filters">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              className={`filter-btn ${activeFilter === cat ? "active" : ""}`}
+              onClick={() => setActiveFilter(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
         <div className="projects-grid">
-          <AnimatePresence>
-            {visibleProjects.map((project) => (
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project) => (
               <motion.div
                 key={project.id}
                 className="project-card"
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
                 whileHover={{ y: -10 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                viewport={{ once: true }}
               >
                 <div className="project-image">
                   <Image
@@ -230,56 +246,6 @@ export default function Projects() {
               </motion.div>
             ))}
           </AnimatePresence>
-        </div>
-
-        <div style={{ textAlign: "center", marginTop: "3rem" }}>
-          <button
-            className="btn-secondary"
-            onClick={() => {
-              if (showAll) {
-                setShowAll(false);
-                requestAnimationFrame(() => {
-                  const section = document.getElementById("projets");
-                  if (section) {
-                    window.scrollTo({
-                      top: section.offsetTop - 0,
-                      behavior: "smooth",
-                    });
-                  }
-                });
-              } else {
-                const scrollY = window.scrollY;
-                setShowAll(true);
-                requestAnimationFrame(() => {
-                  window.scrollTo({ top: scrollY, behavior: "instant" });
-                });
-              }
-            }}
-          >
-            {showAll ? (
-              <>
-                Voir moins{" "}
-                <FaArrowUp
-                  style={{
-                    marginLeft: "8px",
-                    position: "relative",
-                    top: "2px",
-                  }}
-                />
-              </>
-            ) : (
-              <>
-                Voir plus ({PROJECTS_DATA.length - INITIAL_COUNT} projets){" "}
-                <FaArrowDown
-                  style={{
-                    marginLeft: "8px",
-                    position: "relative",
-                    top: "2px",
-                  }}
-                />
-              </>
-            )}
-          </button>
         </div>
       </div>
     </section>

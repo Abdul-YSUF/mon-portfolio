@@ -10,7 +10,13 @@ export default function Footer({ logoSrc }) {
     <footer className="footer">
       <div className="footer-content">
         <div className="footer-logo">
-          <Link href="/">
+          <Link
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
             <Image
               src={logoSrc || "/assets/logo_light.svg"}
               alt="Logo"

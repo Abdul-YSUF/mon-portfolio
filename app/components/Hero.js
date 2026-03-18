@@ -49,7 +49,6 @@ export default function Hero() {
             performant.
           </p>
           <div className="hero-cta">
-            {/* ✅ Scroll manuel */}
             <button
               className="btn-primary"
               onClick={() => scrollToSection("projets")}

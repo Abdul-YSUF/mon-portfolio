@@ -3,7 +3,7 @@ import { FaCode, FaMobileAlt, FaRocket, FaSearch } from "react-icons/fa";
 
 const SERVICES = [
   {
-    title: "Développement Fullstack",
+    title: "Développement Web",
     description:
       "Création d'applications web modernes et scalables avec React, Next.js et Node.js.",
     Icon: FaCode,
