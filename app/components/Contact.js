@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
-import { FaPaperPlane, FaEnvelope, FaCheckCircle } from "react-icons/fa";
+import { FaPaperPlane, FaPhoneAlt, FaCheckCircle } from "react-icons/fa";
 import ReCAPTCHA from "./GoogleReCaptchaProvider";
 import Calendly from "./Calendly";
 
@@ -128,14 +128,12 @@ export default function Contact() {
 
         <div className="contact-grid">
           <div className="contact-info">
-            <div className="info-item">
-              <div className="info-icon">
-                <FaEnvelope />
-              </div>
-              <div>
-                <h4>Email</h4>
-                <p>abdulledev@gmail.com</p>
-              </div>
+            <div className="contact-visual-container">
+              <img
+                className="contact_img_sidebar"
+                alt="Contactez-moi"
+                src="https://res.cloudinary.com/doqbpkxy7/image/upload/q_auto,f_auto/v1742851654/call-center-7040784_1280_ijs3rb.png"
+              />
             </div>
           </div>
 

@@ -30,7 +30,7 @@ export default function About() {
               expert en solutions
             </h2>
             <p>
-              Je m'appelle <strong>Abdul YSUF</strong>. Mon aventure dans le
+              Je m'appelle <strong>Abdul</strong>. Mon aventure dans le
               développement a commencé par une curiosité insatiable pour la
               manière dont les applications que nous utilisons au quotidien sont
               construites.

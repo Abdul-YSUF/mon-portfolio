@@ -837,19 +837,58 @@ body {
   flex-shrink: 0;
 }
 
+.div_titre {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 1rem;
+}
+
+.titre_form {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
-  align-items: start;
+  align-items: center;
+}
+
+.contact-visual-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 2.7rem;
+  padding: 1rem;
+  border-radius: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.contact_img_sidebar {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 15px;
+  animation: floatImage 6s ease-in-out infinite;
+}
+
+@keyframes floatImage {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .contact-info {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
   align-items: center;
-  text-align: center;
 }
 
 .info-item {
@@ -1319,8 +1358,6 @@ body {
   }
   .contact-info {
     align-items: flex-start;
-    text-align: left;
-    gap: 2rem;
   }
   .info-icon {
     width: 50px;

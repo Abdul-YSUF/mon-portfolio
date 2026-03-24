@@ -35,7 +35,7 @@ export default function Hero() {
         <div className="hero-text">
           <span className="badge">Disponible pour de nouveaux projets</span>
           <h1>
-            Salut, je suis <span className="highlight">Abdul YSUF</span>
+            Salut, je suis <span className="highlight">Abdul</span>
           </h1>
           <h2>
             Développeur Web <br />
